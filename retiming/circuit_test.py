@@ -36,6 +36,22 @@ class CircuitTest(unittest.TestCase):
     with self.assertRaises(AssertionError):
       ct.add_vertex(G, -1)
 
+  def test_add_edge(self):
+    G = ct.create_graph()
+    R = ct.add_register(G)
+    V1 = ct.add_vertex(G, 2)
+    V2 = ct.add_vertex(G, 2)
+
+    # edge from V1 to R, R to V2
+    ct.add_edge(G, V1, R)
+    ct.add_edge(G, R, V2)
+
+    self.assertEqual(len(G.nodes()), 3)
+    self.assertEqual(len(G.edges()), 2)
+
+    with self.assertRaises(ValueError):
+      ct.add_edge(G, 'p', 'q')
+
 
 if __name__ == '__main__':
   unittest.main()

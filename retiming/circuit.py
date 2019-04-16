@@ -68,6 +68,20 @@ def add_vertex(G, delay):
 
 def is_in_graph(G, v):
   """ Check whether a node is in the graph. """
+  assert isinstance(v, str)  # v should be a label
+
+  if v.startswith(REG_PREFIX):
+    # TODO: cache this information in the graph
+    regs = get_registers(G)
+    return v in regs
+
+  if v.startswith(VTX_PREFIX):
+    # TODO: cache this information in the graph
+    vtxs = get_vertexes(G)
+    return v in vtxs
+
+  raise ValueError(
+      'v is not prefixed properly for a node in the circuit graph.')
 
 
 def add_edge(G, u, v):
@@ -79,9 +93,9 @@ def add_edge(G, u, v):
   assert isinstance(u, str)
   assert isinstance(v, str)
 
-  if not u.startswith(REG_PREFIX) and not u.startswith(VTX_PREFIX):
-    raise ValueError('u should be a register or a vertex')
-  if not v.startswith(REG_PREFIX) and not v.startswith(VTX_PREFIX):
-    raise ValueError('v should be a register or a vertex')
+  if not is_in_graph(G, u):
+    raise ValueError('u {} is not a node in G.'.format(u))
+  if not is_in_graph(G, v):
+    raise ValueError('v {} is not a node in G.'.format(v))
 
   G.add_edge(u, v)
