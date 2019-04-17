@@ -23,6 +23,8 @@ def retiming_transform(G, r):
       G_[u][v][i]['weight'] += r[v]
 
     # validation
+    if not isinstance(G_[u][v][i]['weight'], int):
+      raise TypeError('Values in retiming {} involve non-integers'.format(r))
     if G_[u][v][i]['weight'] < 0:
       raise ValueError(
           'Retiming "{r}" turns the weight of an edge ({u}, {v}, {i}) into a negative value: {w}.'
